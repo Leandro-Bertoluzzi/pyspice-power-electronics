@@ -2,11 +2,12 @@
 #r#  Controlled half-wave rectifier with an SCR
 #r# ============================================
 
-#r# This example shows the simulation of ...
+#r# This example shows the simulation of a controlled half-wave rectifier with an SCR
 
 ####################################################################################################
 
 import matplotlib.pyplot as plt
+import numpy
 
 ####################################################################################################
 
@@ -26,12 +27,14 @@ from PySpice.Unit import *
 libraries_path = '..\libraries'
 spice_library = SpiceLibrary(libraries_path)
 
-####################################################################################################
-# RECTIFICATION
-####################################################################################################
+#####################################################################################################
+# DEFINING PLOTS
+#####################################################################################################
 
 figure1, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10))
 
+####################################################################################################
+# CIRCUIT DEFINITION
 ####################################################################################################
 
 circuit = Circuit('SCR half wave rectifier')
@@ -45,38 +48,68 @@ pulse_width = (source.period/2) * (1- alpha)
 circuit.PulseVoltageSource('trigger', 'gate', 'output', 0@u_V, 1@u_V, delay_time=delay_time, pulse_width=pulse_width, period=source.period, rise_time=1@u_ms, fall_time=1@u_ms)
 # SCR
 circuit.include(spice_library['EC103D1'])
-circuit.X('SCR', 'EC103D1', 'source', 'gate', 'output')
+circuit.X('scr', 'EC103D1', 'source', 'gate', 'output')
 # Series resistor as load
 circuit.R('load', 'output', circuit.gnd, 100@u_Ω)
+
+# Show the netlist
+print('**** Circuit netlist: ****')
+print(circuit)
+
+####################################################################################################
+# SIMULATION
+####################################################################################################
 
 simulator = circuit.simulator(temperature=25, nominal_temperature=25)
 analysis = simulator.transient(step_time=source.period/200, end_time=source.period*2)
 
+# Formatting results
+v_source = numpy.array(analysis.nodes['source'])
+v_gate = numpy.array(analysis.nodes['gate'])
+v_output = numpy.array(analysis.nodes['output'])
+
+# Plot
 ax1.set_title('Half-Wave Rectification')
 ax1.set_xlabel('Time [ms]')
 ax1.set_ylabel('Voltage [V]')
 ax1.grid()
-ax1.plot(analysis['source'])
-ax1.plot(analysis['gate'])
-ax1.plot(analysis.output)
+ax1.plot(v_source)
+ax1.plot(v_gate)
+ax1.plot(v_output)
 ax1.legend(('input', 'gate', 'output'), loc=(.05,.1))
 ax1.set_ylim(float(-source.amplitude*1.1), float(source.amplitude*1.1))
 
+####################################################################################################
+# CIRCUIT DEFINITION - FILTERED
 ####################################################################################################
 
 # We add a capacitor to filter the output voltage
 circuit.C('1', 'output', circuit.gnd, 1@u_mF)
 
+# Show the netlist
+print('**** Circuit netlist (with filter): ****')
+print(circuit)
+
+####################################################################################################
+# SIMULATION
+####################################################################################################
+
 simulator = circuit.simulator(temperature=25, nominal_temperature=25)
 analysis = simulator.transient(step_time=source.period/200, end_time=source.period*2)
 
+# Formatting results
+v_source = numpy.array(analysis.nodes['source'])
+v_gate = numpy.array(analysis.nodes['gate'])
+v_output = numpy.array(analysis.nodes['output'])
+
+# Plot
 ax2.set_title('Half-Wave Rectification with filtering')
 ax2.set_xlabel('Time [ms]')
 ax2.set_ylabel('Voltage [V]')
 ax2.grid()
-ax2.plot(analysis['source'])
-ax2.plot(analysis['gate'])
-ax2.plot(analysis.output)
+ax2.plot(v_source)
+ax2.plot(v_gate)
+ax2.plot(v_output)
 ax2.legend(('input', 'gate', 'output'), loc=(.05,.1))
 ax2.set_ylim(float(-source.amplitude*1.1), float(source.amplitude*1.1))
 
