@@ -23,6 +23,16 @@
 *
 *******************************************
 *
+.SUBCKT BAV21 1 2 
+*
+* The resistor R1 does not reflect 
+* a physical device. Instead it
+* improves modeling in the reverse 
+* mode of operation.
+*
+R1 1 2 5.827E+9 
+D1 1 2 BAV21
+*
 .MODEL BAV21 D
 + IS=21.910E-9
 + N=2.2330
@@ -35,4 +45,5 @@
 + BV=293.10
 + IBV=1.2930E-3
 + TT=51.940E-9
+.ENDS
 *
