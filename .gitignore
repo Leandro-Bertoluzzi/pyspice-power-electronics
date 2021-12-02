@@ -1,2 +1,5 @@
 # We ignore the VS Code settings and stuff
 .vscode/*
+
+# Dynamically generated python files
+*/__pycache__

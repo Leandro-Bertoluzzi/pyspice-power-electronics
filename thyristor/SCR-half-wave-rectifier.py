@@ -4,10 +4,16 @@
 
 #r# This example shows the simulation of a controlled half-wave rectifier with an SCR
 
-####################################################################################################
+######################################### IMPORT MODULES #########################################
 
 import matplotlib.pyplot as plt
 import numpy
+
+######################################### IMPORT UTILITIES #########################################
+
+import sys
+sys.path.insert(1, '../utilities/')
+from utilities import format_output
 
 ####################################################################################################
 
@@ -64,18 +70,20 @@ simulator = circuit.simulator(temperature=25, nominal_temperature=25)
 analysis = simulator.transient(step_time=source.period/200, end_time=source.period*2)
 
 # Formatting results
-v_source = numpy.array(analysis.nodes['source'])
-v_gate = numpy.array(analysis.nodes['gate'])
-v_output = numpy.array(analysis.nodes['output'])
+voltages, currents = format_output(analysis, 'transient')
+v_source = voltages['source']
+v_gate = voltages['gate']
+v_output = voltages['output']
+t = voltages['time']
 
 # Plot
 ax1.set_title('Half-Wave Rectification')
-ax1.set_xlabel('Time [ms]')
+ax1.set_xlabel('Time [s]')
 ax1.set_ylabel('Voltage [V]')
 ax1.grid()
-ax1.plot(v_source)
-ax1.plot(v_gate)
-ax1.plot(v_output)
+ax1.plot(t, v_source)
+ax1.plot(t, v_gate)
+ax1.plot(t, v_output)
 ax1.legend(('input', 'gate', 'output'), loc=(.05,.1))
 ax1.set_ylim(float(-source.amplitude*1.1), float(source.amplitude*1.1))
 
@@ -98,18 +106,20 @@ simulator = circuit.simulator(temperature=25, nominal_temperature=25)
 analysis = simulator.transient(step_time=source.period/200, end_time=source.period*2)
 
 # Formatting results
-v_source = numpy.array(analysis.nodes['source'])
-v_gate = numpy.array(analysis.nodes['gate'])
-v_output = numpy.array(analysis.nodes['output'])
+voltages, currents = format_output(analysis, 'transient')
+v_source = voltages['source']
+v_gate = voltages['gate']
+v_output = voltages['output']
+t = voltages['time']
 
 # Plot
 ax2.set_title('Half-Wave Rectification with filtering')
-ax2.set_xlabel('Time [ms]')
+ax2.set_xlabel('Time [s]')
 ax2.set_ylabel('Voltage [V]')
 ax2.grid()
-ax2.plot(v_source)
-ax2.plot(v_gate)
-ax2.plot(v_output)
+ax2.plot(t, v_source)
+ax2.plot(t, v_gate)
+ax2.plot(t, v_output)
 ax2.legend(('input', 'gate', 'output'), loc=(.05,.1))
 ax2.set_ylim(float(-source.amplitude*1.1), float(source.amplitude*1.1))
 

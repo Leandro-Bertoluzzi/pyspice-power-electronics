@@ -4,6 +4,14 @@
 
 #r# This example shows the simulation of a simple voltage divider made of resistances
 
+######################################### IMPORT UTILITIES #########################################
+
+import sys
+# Insert at 1, 0 is the script path
+# Inserting it at the beginning has the benefit of guaranteeing that the path is searched before others (even built-in ones) in the case of naming conflicts
+sys.path.insert(1, '../utilities/')
+from utilities import format_output
+
 ####################################################################################################
 
 import PySpice.Logging.Logging as Logging
@@ -41,5 +49,6 @@ analysis = simulator.operating_point()
 
 # Show results
 print('**** Simulation result: ****')
-out_value = float(analysis.nodes['out'])
-print(out_value)
+voltages, currents = format_output(analysis, 'operating_point')
+out_value = voltages['out']
+print(out_value, " [V]")
