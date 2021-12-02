@@ -8,6 +8,7 @@
 
 import matplotlib.pyplot as plt
 import numpy
+from scipy.fft import fft, fftfreq
 
 #####################################################################################################
 
@@ -32,6 +33,7 @@ spice_library = SpiceLibrary(libraries_path)
 
 figure1, (ax1, ax2) = plt.subplots(2, 1, figsize=(20, 10))
 figure2, (ax3, ax4) = plt.subplots(2, 1, figsize=(20, 10))
+figure3, (ax5, ax6) = plt.subplots(2, 1, figsize=(20, 10))
 
 ####################################################################################################
 # CIRCUIT DEFINITION
@@ -103,6 +105,24 @@ ax2.legend('l1', loc=(.05,.1))
 ax2.set_ylim(float(1.1 * min_current), float(1.1 * max_current))
 
 ####################################################################################################
+# FREQUENCY DOMAIN
+####################################################################################################
+
+# Number of samplepoints
+N = len(i_load)
+DURATION = source.period*periods
+SAMPLE_RATE = N / DURATION
+
+yf = fft(i_load)
+xf = fftfreq(N, 1 / SAMPLE_RATE)[:N//5000]
+
+ax5.set_title('Half-Wave Rectification - Without filter')
+ax5.set_xlabel('Frequency [Hz]')
+ax5.set_ylabel('Amplitude')
+ax5.grid()
+ax5.plot(xf, 2.0/N * numpy.abs(yf[0:N//5000]))
+
+####################################################################################################
 # CIRCUIT DEFINITION - FILTERED
 ####################################################################################################
 
@@ -150,6 +170,22 @@ ax4.plot(i_load)
 ax4.legend('l1', loc=(.05,.1))
 ax4.set_ylim(float(1.1 * min_current), float(1.1 * max_current))
 
-plt.show()
+####################################################################################################
+# FREQUENCY DOMAIN
+####################################################################################################
+
+N = len(i_load)
+SAMPLE_RATE = N / DURATION
+yf = fft(i_load)
+xf = fftfreq(N, 1 / SAMPLE_RATE)[:N//100]
+
+ax6.set_title('Half-Wave Rectification - Filtered')
+ax6.set_xlabel('Frequency [Hz]')
+ax6.set_ylabel('Amplitude')
+ax6.grid()
+ax6.plot(xf, 2.0/N * numpy.abs(yf[0:N//100]))
 
 ####################################################################################################
+
+# Show plots
+plt.show()
