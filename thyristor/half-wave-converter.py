@@ -11,8 +11,13 @@ import numpy
 
 ######################################### IMPORT UTILITIES #########################################
 
-import sys
-sys.path.insert(1, '../utilities/')
+import sys, os
+
+if os.environ.get('IN_CONTAINER') == 'Yes':
+    sys.path.insert(1, '/root/utilities/')
+else:
+    sys.path.insert(1, '../utilities/')
+
 from utilities import format_output
 
 ####################################################################################################
@@ -30,7 +35,10 @@ from PySpice.Unit import *
 
 ############################# LIBRARIES WITH DEFINITIONS OF COMPONENTS #############################
 
-libraries_path = '..\libraries'
+if os.environ.get('IN_CONTAINER') == 'Yes':
+    libraries_path = '/root/libraries'
+else:
+    libraries_path = '../libraries'
 spice_library = SpiceLibrary(libraries_path)
 
 #####################################################################################################

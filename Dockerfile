@@ -1,3 +1,5 @@
+# Based on: https://github.com/cyber-g/ubuntu-pyspice-std
+
 FROM ubuntu:focal
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y && apt-get upgrade -y
@@ -17,8 +19,12 @@ RUN apt-get install -y python3-tk
 # Validate PySpice installation
 RUN pyspice-post-installation --check-install
 
+# Create an environment variable to indicate we are inside a container
+ENV IN_CONTAINER Yes
+
 # Copy scripts to run
 COPY . .
 
-# Run PySpice example
-ENTRYPOINT python3 ac-dc-converters/full-converter.py
+# Run python, with default with a PySpice example
+ENTRYPOINT ["python3"]
+CMD ["basic-circuits/voltage-divider.py"]

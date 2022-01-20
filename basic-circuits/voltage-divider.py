@@ -6,10 +6,14 @@
 
 ######################################### IMPORT UTILITIES #########################################
 
-import sys
+import sys, os
 # Insert at 1, 0 is the script path
 # Inserting it at the beginning has the benefit of guaranteeing that the path is searched before others (even built-in ones) in the case of naming conflicts
-sys.path.insert(1, '../utilities/')
+if os.environ.get('IN_CONTAINER') == 'Yes':
+    sys.path.insert(1, '/root/utilities/')
+else:
+    sys.path.insert(1, '../utilities/')
+
 from utilities import format_output
 
 ####################################################################################################
