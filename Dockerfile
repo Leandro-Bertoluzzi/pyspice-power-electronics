@@ -23,7 +23,7 @@ RUN pyspice-post-installation --check-install
 ENV IN_CONTAINER Yes
 
 # Copy scripts to run
-COPY . .
+COPY /scripts .
 
 # Run python, with default with a PySpice example
 ENTRYPOINT ["python3"]
