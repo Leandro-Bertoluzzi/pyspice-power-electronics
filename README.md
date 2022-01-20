@@ -54,16 +54,15 @@ The following tools were used in this project:
 - [NgSpice](http://ngspice.sourceforge.net/)
 - [Matplotlib](https://matplotlib.org/)
 - [Numpy](https://numpy.org/)
+- [Docker](https://www.docker.com/)
 
 ## :white_check_mark: Requirements ##
 
-Before starting :checkered_flag:, you need to have [PySpice](https://pyspice.fabrice-salvaire.fr/) installed.
+- If you want to use the docker container, you only need to [install Docker](https://www.docker.com/get-started) in your machine.
 
-The version currently used is v1.5: https://pyspice.fabrice-salvaire.fr/releases/v1.5/installation.html
+- If you decide to not use docker, you need to install [PySpice](https://pyspice.fabrice-salvaire.fr/). The version currently used is [v1.5](https://pyspice.fabrice-salvaire.fr/releases/v1.5/installation.html). In the same docs you are taught how to install NgSpice.
 
-In the same docs you are taught how to install NgSpice.
-
-On Windows, I highly recommend installing it via Anaconda or Miniconda.
+If you choose the second option, local setup, and you are a Windows user, I highly recommend installing it via Anaconda or Miniconda.
 
 ## :checkered_flag: Starting ##
 
@@ -74,7 +73,12 @@ $ git clone https://github.com/Leandro-Bertoluzzi/pyspice-power-electronics
 # Access
 $ cd pyspice-power-electronics
 
-# Enter any of the folders and run a script
+# Option 1: Using Docker container
+## Build and run the Docker image with the script as a parameter
+docker build -t pyspice . && docker run --rm pyspice the_folder/the_file.py
+
+# Option 2: Installing PySpice in local machine
+## Enter any of the folders and run a script
 $ cd the_folder
 $ python the_file.py
 ```
