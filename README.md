@@ -70,18 +70,25 @@ If you choose the second option, local setup, and you are a Windows user, I high
 # Clone this project
 $ git clone https://github.com/Leandro-Bertoluzzi/pyspice-power-electronics
 
-# Access
+# Access the project folder
 $ cd pyspice-power-electronics
 
 # Option 1: Using Docker container
-## Build and run the Docker image with the script as a parameter
-docker build -t pyspice . && docker run --rm pyspice the_folder/the_file.py
+## Before running it for the first time and every time you modify the scripts, build the docker container
+docker build -t pyspice .
+## Run the Docker container with the script as a parameter
+docker run --rm -v %cd%/results:/root/results pyspice the_folder/the_file.py
 
 # Option 2: Installing PySpice in local machine
 ## Enter any of the folders and run a script
 $ cd the_folder
 $ python the_file.py
 ```
+
+**Note:** To get the current directory you must use:
+- Windows (cmd): %cd%
+- Windows (PowerShell): ${PWD}
+- Linux: $(pwd)
 
 ## :memo: License ##
 

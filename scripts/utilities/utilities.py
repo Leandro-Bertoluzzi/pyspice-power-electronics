@@ -1,4 +1,5 @@
 import numpy as np
+import os
 
 '''
 - Name: format_output
@@ -38,3 +39,19 @@ def format_output(analysis, simulation_mode):
         currents['time'] = np.array(t)
     
     return voltages, currents
+
+'''
+- Name: get_output_file_name
+- Parameter(s):
+    - file_name: string
+- Description:
+    Generates the absolute path to save the output file in the "results" folder
+'''
+
+def get_output_file_name(file_name):
+    my_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/results"
+
+    if not os.path.isdir(my_path):
+        os.makedirs(my_path)
+
+    return os.path.join(my_path, file_name)

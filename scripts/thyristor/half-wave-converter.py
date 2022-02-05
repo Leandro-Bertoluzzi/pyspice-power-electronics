@@ -18,7 +18,7 @@ if os.environ.get('IN_CONTAINER') == 'Yes':
 else:
     sys.path.insert(1, '../utilities/')
 
-from utilities import format_output
+from utilities import format_output, get_output_file_name
 
 ####################################################################################################
 
@@ -135,4 +135,10 @@ ax2.set_ylim(float(-source.amplitude*1.1), float(source.amplitude*1.1))
 
 # Adjusts the spacing between subplots
 figure1.tight_layout(pad=3.0)
-plt.show()
+
+# Save/show plots
+if os.environ.get('IN_CONTAINER') == 'Yes':
+    file_name = get_output_file_name("half-wave-converter-result.png")
+    plt.savefig(file_name)
+else:
+    plt.show()

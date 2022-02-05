@@ -19,7 +19,7 @@ if os.environ.get('IN_CONTAINER') == 'Yes':
 else:
     sys.path.insert(1, '../utilities/')
 
-from utilities import format_output
+from utilities import format_output, get_output_file_name
 
 #####################################################################################################
 
@@ -208,5 +208,10 @@ ax6.plot(xf, 2.0/N * numpy.abs(yf[0:N//100]))
 figure1.tight_layout(pad=3.0)
 figure2.tight_layout(pad=3.0)
 figure3.tight_layout(pad=3.0)
-# Show plots
-plt.show()
+
+# Save/show plots
+if os.environ.get('IN_CONTAINER') == 'Yes':
+    file_name = get_output_file_name("half-wave-converter-RL-result.png")
+    plt.savefig(file_name)
+else:
+    plt.show()
