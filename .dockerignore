@@ -1,2 +1,5 @@
-# Dynamically generated python files
-*/__pycache__
+# Dynamically generated files
+__pycache__
+.cache
+.bash_history
+*.png
