@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  pyspice:
+    image: pyspice
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./results/:/root/results
+    container_name: pyspice-power electronics
