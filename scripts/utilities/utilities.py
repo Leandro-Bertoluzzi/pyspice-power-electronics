@@ -5,7 +5,7 @@ import os
 - Name: format_output
 - Parameter(s):
     - analysis: SPICE simulation result
-    - simulation_mode: Type of simulation (operating_pint, transient, etc)
+    - simulation_mode: Type of simulation (operating_pint, transient, ac)
 - Description:
     Receives a raw SPICE simulation result and creates a dictionary with a key/value pair for each node
 '''
@@ -19,6 +19,10 @@ def format_output(analysis, simulation_mode):
         data_label = str(node)  # Extract node name
         if simulation_mode == 'operating_point':
             voltages[data_label] = float(node)
+        elif simulation_mode == 'ac':
+            voltages[data_label] = {}
+            voltages[data_label]['magnitude'] = np.abs(node)
+            voltages[data_label]['phase'] = np.angle(node)
         else:
             voltages[data_label] = np.array(node)
     
@@ -26,7 +30,11 @@ def format_output(analysis, simulation_mode):
     for branch in analysis.branches.values():
         data_label = str(branch)  # Extract node name
         if simulation_mode == 'operating_point':
-            currents[data_label] = float(node)
+            currents[data_label] = float(branch)
+        elif simulation_mode == 'ac':
+            currents[data_label] = {}
+            currents[data_label]['magnitude'] = np.abs(branch)
+            currents[data_label]['phase'] = np.angle(branch)
         else:
             currents[data_label] = np.array(branch)
     
@@ -37,6 +45,14 @@ def format_output(analysis, simulation_mode):
             t.append(val)
         voltages['time'] = np.array(t)
         currents['time'] = np.array(t)
+    
+    # If the simulation mode is "ac",  we also return frequency
+    if simulation_mode == 'ac':
+        f = []
+        for val in analysis.frequency:
+            f.append(val)
+        voltages['frequency'] = np.array(f)
+        currents['frequency'] = np.array(f)
     
     return voltages, currents
 
